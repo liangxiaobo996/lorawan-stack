@@ -39,6 +39,7 @@ func (d *definition) With(options ...Option) Builder {
 
 var defaultOptions = []Option{
 	WithVisibility(ttnpb.RIGHT_ALL),
+	WithAuthFromContext(),
 }
 
 func (d *definition) New(ctx context.Context, opts ...Option) Event {
@@ -71,7 +72,7 @@ func defineSkip(name, description string, skip uint, opts ...Option) Builder {
 	i18n.Define(fmt.Sprintf("%s:%s", i18nPrefix, name), description).SetSource(1 + skip)
 	initMetrics(name)
 
-	var b Builder = def
+	b := def.With(defaultOptions...)
 	if len(opts) > 0 {
 		b = b.With(opts...)
 	}
